@@ -15,6 +15,7 @@ public class Customer {
     protected int cust_id;
     protected String name;
     protected String email;
+    protected Long phone;
     protected String password;
     protected String role;
     @ManyToOne

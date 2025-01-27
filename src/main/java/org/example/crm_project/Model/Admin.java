@@ -20,6 +20,7 @@ public class Admin {
     protected String name;
     protected String email;
     protected String password;
+    protected Long phone;
     protected String role;
     @OneToMany(mappedBy = "admin", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Manager> managers = new ArrayList<>();

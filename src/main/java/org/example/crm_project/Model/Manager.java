@@ -19,6 +19,7 @@ public class Manager {
     protected String name;
     protected String email;
     protected String password;
+    protected Long phone;
     protected String role;
     @ManyToOne
     @JoinColumn(name = "admin_id", nullable = false)
