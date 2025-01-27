@@ -8,6 +8,6 @@ public class CrmProjectApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(CrmProjectApplication.class, args);
+		System.out.println("Hello Konnekt!");
 	}
-
 }
