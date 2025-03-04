@@ -15,9 +15,10 @@ public class AdminService {
     }
 
 
-    public boolean authenticate(String email, String password, String role) {
+    public Admin authenticate(String email, String password, String role) {
         Admin admin = (Admin) adminRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Admin not found"));
-        return admin.getPassword().equals(password);
+        if( admin.getPassword().equals(password)) return admin;
+        return null;
     }
 }

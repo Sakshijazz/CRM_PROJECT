@@ -15,10 +15,11 @@ public class ManagerService {
         managerRepository.save(manager);
     }
 
-    public boolean authenticate(String email, String password, String role) {
+    public Manager authenticate(String email, String password, String role) {
         Manager manager = (Manager) managerRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Manager not found"));
-        return manager.getPassword().equals(password);
+        if( manager.getPassword().equals(password)) return manager;
+        return null;
     }
 
 }

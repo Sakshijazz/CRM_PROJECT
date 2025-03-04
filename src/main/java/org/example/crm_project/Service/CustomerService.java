@@ -15,9 +15,10 @@ public class CustomerService {
     }
 
 
-    public boolean authenticate(String email, String password, String role) {
+    public Customer authenticate(String email, String password, String role) {
         Customer customer = (Customer) customerRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Customer not found"));
-        return customer.getPassword().equals(password);
+        if( customer.getPassword().equals(password)) return customer;
+        return null;
     }
 }

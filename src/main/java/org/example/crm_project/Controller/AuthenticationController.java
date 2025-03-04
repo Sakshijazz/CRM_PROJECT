@@ -1,5 +1,6 @@
 package org.example.crm_project.Controller;
 
+import jakarta.servlet.http.HttpSession;
 import org.example.crm_project.Model.Admin;
 import org.example.crm_project.Model.Customer;
 import org.example.crm_project.Model.Employee;
@@ -9,12 +10,13 @@ import org.example.crm_project.Service.ManagerService;
 import org.example.crm_project.Service.EmployeeService;
 import org.example.crm_project.Service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 @RestController
+@RequestMapping("/konnekt")
+@CrossOrigin(origins = "http://localhost:5173")
 public class AuthenticationController {
 
     @Autowired
@@ -87,35 +89,53 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signin")
-    public RedirectView signIn(@RequestParam String email, @RequestParam String password, @RequestParam String role) {
+    public RedirectView signIn(
+            @RequestParam String email,
+            @RequestParam String password,
+            @RequestParam String role,
+            RedirectAttributes redirectAttributes) { // Use RedirectAttributes to pass data during redirect
+
         switch (role.toUpperCase()) {
             case "ADMIN":
-                if(adminService.authenticate(email, password, role))
-                {
-                    return new RedirectView("/index.html");
-                }return new RedirectView("/error.html");
+                Admin admin = adminService.authenticate(email, password, role);
+                if (admin != null) {
+                    // Add the admin object to RedirectAttributes
+                    redirectAttributes.addFlashAttribute("user", admin);
+                    return new RedirectView("/index"); // Redirect to the index page
+                }
+                return new RedirectView("/error"); // Redirect to the error page
 
             case "MANAGER":
-                if(managerService.authenticate(email, password, role))
-                {
-                    return new RedirectView("/index.html");
-                }return new RedirectView("/error.html");
+                Manager manager = managerService.authenticate(email, password, role);
+                if (manager != null) {
+                    // Add the manager object to RedirectAttributes
+                    redirectAttributes.addFlashAttribute("user", manager);
+                    return new RedirectView("/index"); // Redirect to the index page
+                }
+                return new RedirectView("/error"); // Redirect to the error page
 
             case "EMPLOYEE":
-                if(employeeService.authenticate(email, password, role))
-                {
-                    return new RedirectView("/index.html");
-                }return new RedirectView("/error.html");
+                Employee employee = employeeService.authenticate(email, password, role);
+                if (employee != null) {
+                    // Add the employee object to RedirectAttributes
+                    redirectAttributes.addFlashAttribute("user", employee);
+                    return new RedirectView("/employeeHome.html"); // Redirect to the employee home page
+                }
+                return new RedirectView("/error"); // Redirect to the error page
 
             case "CUSTOMER":
-                if(customerService.authenticate(email, password, role))
-                {
-                    return new RedirectView("/index.html");
-                }return new RedirectView("/error.html");
+                Customer customer = customerService.authenticate(email, password, role);
+                if (customer != null) {
+                    // Add the customer object to RedirectAttributes
+                    redirectAttributes.addFlashAttribute("user", customer);
+                    return new RedirectView("/index"); // Redirect to the index page
+                }
+                return new RedirectView("/error"); // Redirect to the error page
 
             default:
                 throw new RuntimeException("Invalid role");
         }
 
     }
+
 }

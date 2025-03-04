@@ -14,9 +14,10 @@ public class EmployeeService {
         employeeRepository.save(employee);
     }
 
-    public boolean authenticate(String email, String password, String role) {
+    public Employee authenticate(String email, String password, String role) {
         Employee employee = (Employee) employeeRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Employee not found"));
-        return employee.getPassword().equals(password);
+        if(employee.getPassword().equals(password)) return employee;
+         return null;
     }
 }
